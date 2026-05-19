@@ -1,68 +1,6 @@
 #christian
-import pyodbc
 import datetime
-
-try:
-    conn = pyodbc.connect(
-    "DRIVER={ODBC Driver 18 for SQL Server};"
-    "SERVER=***************;"
-    "DATABASE=DBPracticas;"  
-    "UID=soporte;"
-    "PWD=************;"
-    "TrustServerCertificate=yes;"
-    )
-    if conn:
-        print("Conectado correctamente")
-except: pass
-finally:
-    conn.close
-    
-cursor = conn.cursor()
-def lectura(tabla):
-    print("Buscando ...")
-    cursor.execute(f"SELECT * FROM {tabla}")
-    for row in cursor.fetchall():
-        print(" ",row)
-    print("Listo")
-    
-def insertarDepto(nombre,ubicacion):
-    cursor.execute("INSERT INTO Departamentos(nomDepto,ubicacion) values(?,?)",
-               (nombre,ubicacion)
-               )
-    conn.commit()
-    print("Insertado perfectamente")
-    
-def insertarEmple(nombre,ape1,ape2,fecIni,edad):
-    try:
-        cursor.execute("INSERT INTO Empleados(nomEmpleado,ape1Empleado,ape2Empleado,fecIniEmp,edad) values(?,?,?,?,?)",
-                (nombre,ape1,ape2,fecIni,edad)
-                    )
-        conn.commit()
-        print("Insertado Perfectamente")
-    except pyodbc.Error:
-        print("Ooops los campos fecha o edad estan mal")
-    
-def actualizarDepto(nombre,ubicacion,codigo):
-    cursor.execute("UPDATE Departamentos SET nomDepto = ?, ubicacion = ? WHERE codDepto = ?",
-               (nombre,ubicacion,codigo)
-              )
-    conn.commit()
-    print("Actualizado satisfactoriamente")
-    
-def actualizarEmple(nombre):
-    cursor.execute("UPDATE Departamentos SET  WHERE codEmpleado = ?",
-               (nombre)
-              )
-    conn.commit()
-    print("Actualizado satisfactoriamente")
-
-def eliminar(codigo):
-    cursor.execute("DELETE FROM Departamentos WHERE codDepto = ?",
-                (codigo,)
-            )
-    conn.commit()
-    print(f"{codigo} eliminado satisfactoriamente")
-
+import crud
 
 def subMenu():
     try:
@@ -106,15 +44,15 @@ while(salida != "si"):
                         case 1:
                             tabla = "Departamentos"
                             print(f"Leyendo {tabla}")
-                            lectura(tabla)
+                            crud.lectura(tabla)
                         case 2:
                             tabla = "Empleados"
                             print(f"Leyendo {tabla}")
-                            lectura(tabla)
+                            crud.lectura(tabla)
                         case 3:
                             tabla = "Proyectos"
                             print(f"Leyendo {tabla}")
-                            lectura(tabla)
+                            crud.lectura(tabla)
                         case _:
                             print("Saliendo de aqui")
                        
@@ -125,7 +63,7 @@ while(salida != "si"):
                     case 1:
                         nombre = input("Introduzca el nombre del Departamento -> ")
                         ubicacion = input("Ahora introduce la ubicacion -> ")
-                        insertarDepto(nombre,ubicacion)
+                        crud.insertarDepto(nombre,ubicacion)
                     case 2:
                         print("Vas a insertar en Empleados") 
                         #depto = int(input("Introduce el codigo de depto -> "))
@@ -134,8 +72,14 @@ while(salida != "si"):
                         ape2 = input("Ahora introduce el segundo apellido -> ")
                         inicio = datetime.datetime.strptime(input("Ahora introduce cuando entrará a trabajar (yyyy-mm-dd) -> "),"%Y-%m-%d").date()
                         edad = int(input("Por último introduce la edad -> "))
-                        insertarEmple(nombre,ape1,ape2,inicio,edad)
-                                                
+                        crud.insertarEmple(nombre,ape1,ape2,inicio,edad)
+                        
+                    case 3:
+                        print("Vas a insertar en Proyectos")
+                        nombre = input("Introduzca el nombre del Proyecto -> ")
+                        fecIni = datetime.datetime.strptime(input("Ahora introduce la fecha de inicio (yyyy-mm-dd) -> "),"%Y-%m-%d").date()
+                        crud.insertarProye(nombre,fecIni)
+                        
                     case _:
                         print("Saliendo o no implementado")
                 
@@ -145,12 +89,38 @@ while(salida != "si"):
                 match (menu4):
                     case 1:
                         print("Vas a actualizar Departamentos")
+                        crud.lectura("Departamentos")
                         codigo = int(input("Introduce el Codigo del Departamento a actualizar -> "))
+                        crud.lectura(codigo)
                         nombre = input("Ahora introduce el nuevo nombre del Departamento -> ")
                         ubicacion = input("Por último introduce la nueva Ubicacion -> ")
-                        actualizarDepto(nombre,ubicacion,codigo)
+                        crud.actualizarDepto(nombre,ubicacion,codigo)
                     case 2:
                         print("Vas a actualizar Empleados")
+                        crud.lectura("Empleados")
+                        codEmp = int(input("Cual es el codigo del Empleado a actualizar? -> "))
+                        crud.lecturaEmple(codEmp)
+                        codigoDepto = input("Escriba el nuevo o el actual Departamento -> ")
+                        nombre = input("Escribe el nuevo o actual nombre -> ")
+                        ape1 = input("Introduce el nuevo o actual apellido -> ")
+                        ape2 = input("Introduce el nuevo o actual segundo apellido -> ")
+                        fecFin = datetime.datetime.strptime(input("Introduce o no la fecha de finalizacion en la empresa (yyyy-mm-dd) -> "),"%Y-%m-%d").date()
+                        edad = input("Introduce por ultimo la edad nueva o actual -> ")
+                        crud.actualizarEmple(codigoDepto,nombre,ape1,ape2,fecFin,edad,codEmp)
+                        
+                    case 3:
+                        print("Vas a actualizar en Proyectos")
+                        crud.lectura("Proyectos")
+                        codProye = int(input("Cual es el codigo del Proyecto a actualizar? -> "))
+                        crud.lecturaProye(codProye)
+                        nombre = input("Introduce el nuevo o actual nombre del Proyecto -> ")
+                        fechaFin = input("Ahora introduce o no la fecha de Fin de Proyecto (yyyy-mm-dd) -> ")
+                        if(fechaFin != ""):
+                            datetime.datetime.strptime(fechaFin,"%Y-%m-%d").date()
+                        else:
+                            fechaFin = None
+                            
+                        crud.actualizarProye(codProye,nombre,fechaFin)
                         
                     case _:
                         print("Saliendo o no implementado")
@@ -160,20 +130,36 @@ while(salida != "si"):
                 match (menu5):
                     case 1:
                         print("Vas a eliminar un Departamento")
+                        crud.lectura("Departamentos")
                         codigo = int(input("Introduce el Codigo a Eliminar -> "))
-                        eliminar(codigo)
-                    case _:
-                        print("Saliendo o no implementado")
+                        print("ELIMINANDO DEPARTAMENTO -> ")
+                        crud.lecturaDepto(codigo)
+                        crud.eliminarDepto(codigo)
+                    case 2:
+                        print("Vas a eliminar un Empleado")
+                        crud.lectura("Empleados")
+                        codigo = int(input("Introduce el Codigo a Eliminar -> "))
+                        print("ELIMINANDO EMPLEADO -> ")
+                        crud.lecturaEmple(codigo)
+                        crud.eliminarEmple(codigo)
+                    case 3:
+                        print("Vas a eliminar un Proyecto")
+                        crud.lectura("Proyectos")
+                        codigo = int(input("Introduce el codigo a eliminar -> "))
+                        print("EXTERMINANDO PROYECTO ->")
+                        crud.lecturaProye(codigo)
+                        crud.eliminarProyec(codigo)
                         
+                    case _:
+                        print("Saliendo o no implementado")                       
 
             case _:
-                print("Saliendo")
+                print("Saliendo ...")
                 
                 salida = "si"
 
     except ValueError:
-        print("Oops!  That was no valid number.  Try again...")
-    
-cursor.close()
+        print("Oops!  That was no valid number.  Try again idiot...")
 
-print("Adiós")
+crud.cursor.close()
+print("Adiós, no vuelvas más!.")
