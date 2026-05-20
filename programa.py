@@ -11,6 +11,7 @@ def subMenu():
                    |    1.-Departamentos    |
                    |    2.-Empleados        |
                    |    3.-Proyectos        |
+                   |    4.-Roles            |
                    |                        | 
                    |    0.-Salir            |
                     ------------------------
@@ -53,6 +54,10 @@ while(salida != "si"):
                             tabla = "Proyectos"
                             print(f"Leyendo {tabla}")
                             crud.lectura(tabla)
+                        case 4:
+                            tabla = "Roles"
+                            print(f"Leyendo {tabla}")
+                            crud.lectura(tabla)
                         case _:
                             print("Saliendo de aqui")
                        
@@ -79,7 +84,12 @@ while(salida != "si"):
                         nombre = input("Introduzca el nombre del Proyecto -> ")
                         fecIni = datetime.datetime.strptime(input("Ahora introduce la fecha de inicio (yyyy-mm-dd) -> "),"%Y-%m-%d").date()
                         crud.insertarProye(nombre,fecIni)
-                        
+                    
+                    case 4:
+                        print("Vas a insertar en Roles")    
+                        nombre = input("Introduzca el nombre del Rol -> ")    
+                        descrip = input("Y ahora introduce una descripción -> ")
+                        crud.insertarRol(nombre,descrip)
                     case _:
                         print("Saliendo o no implementado")
                 
@@ -122,6 +132,16 @@ while(salida != "si"):
                             
                         crud.actualizarProye(codProye,nombre,fechaFin)
                         
+                    case 4:
+                        print("Vas a actualizar en Roles")
+                        crud.lectura("Roles")
+                        codRol = int(input("Introduce el codigo a actualizar -> "))
+                        crud.lecturaRol(codRol)
+                        nombre = input("Introduce ahora el nuevo o actual nombre -> ")
+                        descrip = input("Por último introduce la descripcion nueva o actual -> ")
+                        
+                        crud.actualizarRol(nombre,descrip,codRol)
+                        
                     case _:
                         print("Saliendo o no implementado")
             case 4:
@@ -149,7 +169,14 @@ while(salida != "si"):
                         print("EXTERMINANDO PROYECTO ->")
                         crud.lecturaProye(codigo)
                         crud.eliminarProyec(codigo)
-                        
+                    case 4:
+                        print("Vas a eliminar un Rol")
+                        crud.lectura("Roles")
+                        codigo = int(input("Introduce el codigo a eliminar -> "))
+                        print("EXTERMINANDO ROL ->")
+                        crud.lecturaRol(codigo)
+                        crud.eliminarRol(codigo)
+                          
                     case _:
                         print("Saliendo o no implementado")                       
 

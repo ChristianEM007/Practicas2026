@@ -15,7 +15,7 @@ finally:
     
 cursor = conn.cursor()
 
-# Lecturas -------------------------------------------------------------------
+#------------------------------------------------------------------- Lecturas -------------------------------------------------------------------
 def lectura(tabla):
     print("Buscando ...")
     cursor.execute(f"SELECT * FROM {tabla}")
@@ -43,14 +43,24 @@ def lecturaProye(codigo):
     for row in cursor.fetchall():
         print(" ",row)
     print("...")
+    
+def lecturaRol(codigo):
+    print("...")
+    cursor.execute(f"SELECT * FROM Roles Where codRol = {codigo}")
+    for row in cursor.fetchall():
+        print(" ",row)
+    print("...")
 
-# Inserciones -------------------------------------------------------------------
+#------------------------------------------------------------------- Inserciones -------------------------------------------------------------------
 def insertarDepto(nombre,ubicacion):
-    cursor.execute("INSERT INTO Departamentos(nomDepto,ubicacion) values(?,?)",
-               (nombre,ubicacion,)
-               )
-    conn.commit()
-    print("Insertado perfectamente")
+    try:
+        cursor.execute("INSERT INTO Departamentos(nomDepto,ubicacion) values(?,?)",
+                (nombre,ubicacion,)
+                )
+        conn.commit()
+        print("Insertado perfectamente")
+    except pyodbc.Error as e:
+        print(f"Ooops FATAL ERROR -> {e}")
     
 def insertarEmple(nombre,ape1,ape2,fecIni,edad):
     try:
@@ -71,8 +81,17 @@ def insertarProye(nombre,fecIni):
     except pyodbc.Error:
         print("Ooops el campo fecha puede estar FATAL")
     
+def insertarRol(nombre,descrip):
+    try:
+        cursor.execute("INSERT INTO Roles(nomRol,descripcion) values(?,?)",
+                       (nombre,descrip))
+        conn.commit()
+        print("Insertado Perfectamente")
+    except pyodbc.Error as e:
+        print(f"Ooops FATAL ERROR -> {e}")
+
         
-# Actualizaciones -------------------------------------------------------------------
+#------------------------------------------------------------------- Actualizaciones -------------------------------------------------------------------
 def actualizarDepto(nombre,ubicacion,codigo):
     cursor.execute("UPDATE Departamentos SET nomDepto = ?, ubicacion = ? WHERE codDepto = ?",
                (nombre,ubicacion,codigo,)
@@ -93,26 +112,53 @@ def actualizarProye(codProye,nombre,fechaFin):
                    )
     conn.commit()
     print("Actualizado satisfactoriamente")
-
-# Eliminaciones -------------------------------------------------------------------
-def eliminarDepto(codigo):
-    cursor.execute("DELETE FROM Departamentos WHERE codDepto = ?",
-                (codigo,)
-            )
-    conn.commit()
-    print(f"{codigo} Eliminado satisfactoriamente")
     
-def eliminarEmple(codigo):
-    cursor.execute("DELETE FROM Empleados WHERE codEmpleado = ?",
-                (codigo,)
-            )
-    conn.commit()
-    print(f"{codigo} Eliminado satisfactoriamente")
-    
-def eliminarProyec(codigo):
-    cursor.execute("DELETE FROM Proyectos WHERE codProyecto = ?",
-                   (codigo,)
+def actualizarRol(nombre,descripcion,codigo):
+    cursor.execute("UPDATE Roles SET nomRol = ?, descripcion = ? WHERE codRol = ?",
+                   (nombre,descripcion,codigo)
                    )
     conn.commit()
-    print(f"{codigo} Eliminado satisfactoriamente")
+    print("Actualizado satisfactoriamente")
+    
+#------------------------------------------------------------------- Eliminaciones -------------------------------------------------------------------
+def eliminarDepto(codigo):
+    try:
+        cursor.execute("DELETE FROM Departamentos WHERE codDepto = ?",
+                    (codigo,)
+                )
+        conn.commit()
+        print(f"{codigo} Eliminado satisfactoriamente")
+    except pyodbc.Error as e:
+        print(f"Ooooupssssy En el Departamento {codigo} tienes por lo menos a 1 empleado")
+    
+def eliminarEmple(codigo):
+    try:
+        cursor.execute("DELETE FROM Empleados WHERE codEmpleado = ?",
+                    (codigo,)
+                )
+        conn.commit()
+        print(f"{codigo} Eliminado satisfactoriamente")
+    except pyodbc.Error as e:
+        print(f"Ooooupssssy Tienes al Empleado {codigo} añadido a uno o varios DetalleProyectos")
+    
+def eliminarProyec(codigo):
+    try:
+        cursor.execute("DELETE FROM Proyectos WHERE codProyecto = ?",
+                    (codigo,)
+                    )
+        conn.commit()
+        print(f"{codigo} Eliminado satisfactoriamente")
+    except pyodbc.Error as e:
+        print(f"Ooooupssssy Tienes el Proyecto {codigo} añadido a DetalleProyectos")
+        
+def eliminarRol(codigo):
+    try:
+        cursor.execute("DELETE FROM Roles WHERE codRol = ?",
+                    (codigo,)
+                    )
+        conn.commit()
+        print(f"{codigo} Eliminado satisfactoriamente")
+    except pyodbc.Error as e:
+        print(f"Ooooupssssy Tienes el rol {codigo} añadido a DetalleProyectos")
+
 
