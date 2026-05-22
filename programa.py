@@ -7,14 +7,15 @@ def subMenu():
         menu2 = int(input(
                     """
                     Selecciona una tabla:
-                    ------------------------
-                   |    1.-Departamentos    |
-                   |    2.-Empleados        |
-                   |    3.-Proyectos        |
-                   |    4.-Roles            |
-                   |                        | 
-                   |    0.-Salir            |
-                    ------------------------
+                    ---------------------------- 
+                   |    1.-Departamentos        |
+                   |    2.-Empleados            |
+                   |    3.-Proyectos            |
+                   |    4.-Roles                |
+                   |    5.-Detalle Proyectos    |
+                   |                            |
+                   |    0.-Salir                |
+                    ---------------------------- 
                     -> """))
         return menu2
     except ValueError:
@@ -27,14 +28,14 @@ while(salida != "si"):
         menu = int(input("""
             ¿Que desea hacer?
             ------------------------
-           |     1.-Leer            | 
-           |     2.-Insertar        | 
-           |     3.-Actualizar      |
-           |     4.-Eliminar        |   
-           |     5.-Salir           |  
+           |     1.-LEER            | 
+           |     2.-INSERTAR        | 
+           |     3.-ACTUALIZAR      |
+           |     4.-ELIMINAR        |   
+           |     0.-Salir           |  
             ------------------------
             -> """
-            )) 
+            ))
         
         match (menu):
         
@@ -58,6 +59,11 @@ while(salida != "si"):
                             tabla = "Roles"
                             print(f"Leyendo {tabla}")
                             crud.lectura(tabla)
+                        case 5:
+                            tabla = "DetalleProyectos"
+                            print(f"Leyendo {tabla}")
+                            crud.lectura(tabla)
+                        
                         case _:
                             print("Saliendo de aqui")
                        

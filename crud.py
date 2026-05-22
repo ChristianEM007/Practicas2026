@@ -50,7 +50,14 @@ def lecturaRol(codigo):
     for row in cursor.fetchall():
         print(" ",row)
     print("...")
-
+    
+def lecturaDetalle(codigoE,codigoP):
+    print("...")
+    cursor.execute(f"SELECT * FROM DealleProyectos Where codEmple = {codigoE} and codProye = {codigoP}")
+    for row in cursor.fetchall():
+        print(" ",row)
+    print("...")
+    
 #------------------------------------------------------------------- Inserciones -------------------------------------------------------------------
 def insertarDepto(nombre,ubicacion):
     try:
@@ -90,6 +97,15 @@ def insertarRol(nombre,descrip):
     except pyodbc.Error as e:
         print(f"Ooops FATAL ERROR -> {e}")
 
+def insertaDetalle(codEmple,codProye,rol,horas):
+    try:
+        cursor.execute("INSERT INTO DetalleProyectos(codEmple,codProye,rol,horasAsignadas) values(?,?,?,?)",
+                    (codEmple,codProye,rol,horas) 
+                    )
+        conn.commit()
+        print("Insertado Perfectamente")
+    except pyodbc.Error as e:
+        print(f"Ooops FATAL ERROR -> {e}")
         
 #------------------------------------------------------------------- Actualizaciones -------------------------------------------------------------------
 def actualizarDepto(nombre,ubicacion,codigo):
@@ -117,6 +133,11 @@ def actualizarRol(nombre,descripcion,codigo):
     cursor.execute("UPDATE Roles SET nomRol = ?, descripcion = ? WHERE codRol = ?",
                    (nombre,descripcion,codigo)
                    )
+    conn.commit()
+    print("Actualizado satisfactoriamente")
+    
+def actualizaDetalle(codEmple,codProye,rol,horas):
+    cursor.execute("UPDATE DetalleProyectos SET rol = ?, horasAsignadas = ? WHERE codEmple = ? and codProye = ?")
     conn.commit()
     print("Actualizado satisfactoriamente")
     
@@ -161,4 +182,12 @@ def eliminarRol(codigo):
     except pyodbc.Error as e:
         print(f"Ooooupssssy Tienes el rol {codigo} añadido a DetalleProyectos")
 
+def eliminarDetalle(codEmple,codProye):
+    try:
+        cursor.execute("DELETE FROM DetalleProyectos WHERE codEmple = ? and codProye = ?",
+                        (codEmple,codProye))
+        conn.commit()
+        print("Eliminado satisfactoriamente")
+    except pyodbc.Error as e:
+        print(f"Ooooupssssy FATAL ERROR in DetalleProyectos -> {e}")
 
