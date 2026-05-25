@@ -51,9 +51,9 @@ def lecturaRol(codigo):
         print(" ",row)
     print("...")
     
-def lecturaDetalle(codigoE,codigoP):
+def lecturaDetalle(codigoE,codigoP,rol):
     print("...")
-    cursor.execute(f"SELECT * FROM DealleProyectos Where codEmple = {codigoE} and codProye = {codigoP}")
+    cursor.execute(f"SELECT * FROM DealleProyectos Where codEmple = {codigoE} and codProye = {codigoP} and rol = {rol}")
     for row in cursor.fetchall():
         print(" ",row)
     print("...")
@@ -137,7 +137,8 @@ def actualizarRol(nombre,descripcion,codigo):
     print("Actualizado satisfactoriamente")
     
 def actualizaDetalle(codEmple,codProye,rol,horas):
-    cursor.execute("UPDATE DetalleProyectos SET rol = ?, horasAsignadas = ? WHERE codEmple = ? and codProye = ?")
+    cursor.execute("UPDATE DetalleProyectos SET horasAsignadas = ?, WHERE codEmple = ? and codProye = ? and rol = ?",
+                   (horas,codEmple,codProye,rol))
     conn.commit()
     print("Actualizado satisfactoriamente")
     
@@ -182,10 +183,10 @@ def eliminarRol(codigo):
     except pyodbc.Error as e:
         print(f"Ooooupssssy Tienes el rol {codigo} añadido a DetalleProyectos")
 
-def eliminarDetalle(codEmple,codProye):
+def eliminarDetalle(codEmple,codProye,rol):
     try:
-        cursor.execute("DELETE FROM DetalleProyectos WHERE codEmple = ? and codProye = ?",
-                        (codEmple,codProye))
+        cursor.execute("DELETE FROM DetalleProyectos WHERE codEmple = ? and codProye = ? and rol = ?",
+                        (codEmple,codProye,rol))
         conn.commit()
         print("Eliminado satisfactoriamente")
     except pyodbc.Error as e:

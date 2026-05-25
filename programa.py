@@ -96,6 +96,24 @@ while(salida != "si"):
                         nombre = input("Introduzca el nombre del Rol -> ")    
                         descrip = input("Y ahora introduce una descripción -> ")
                         crud.insertarRol(nombre,descrip)
+                        
+                    case 5: 
+                        print("Vas a insertar en Detalle Proyectos")
+                        
+                        print("Tabla de Proyectos:")
+                        crud.lectura("Proyectos")
+                        codProye = input("Introduce el codigo de Proyecto -> ")
+                        
+                        print("Tabla de Empleados:")
+                        crud.lectura("Empleados")
+                        codEmp = input("Ahora introduzca el codigo del empleado -> ")
+                        
+                        print("Tabla de Roles:")
+                        crud.lectura("Roles")
+                        codRol = input("Introduce ahora el codigo de Rol -> ")
+                        horas = input("Por ultimo intdroduce las horas asignadas que tendra este empleado -> ")
+                        crud.insertaDetalle(codEmp,codProye,codRol,horas)
+                    
                     case _:
                         print("Saliendo o no implementado")
                 
@@ -148,6 +166,16 @@ while(salida != "si"):
                         
                         crud.actualizarRol(nombre,descrip,codRol)
                         
+                    case 5:
+                        print("Vas a actualizar en Detalle Proyectos")
+                        crud.lectura("DetalleProyectos")
+                        codEmple = input("Introduce el codigo de Empleado")
+                        codProye = input("Ahora el codigo de Proyecto")
+                        rol = input("Introduce el codigo de Rol")
+                        crud.lecturaDetalle(codEmple,codProye,rol)
+                        horas = input("Introduce las horas que quería cambiar -> ")
+                        crud.actualizaDetalle(codEmple,codProye,rol,horas)
+                        
                     case _:
                         print("Saliendo o no implementado")
             case 4:
@@ -182,7 +210,15 @@ while(salida != "si"):
                         print("EXTERMINANDO ROL ->")
                         crud.lecturaRol(codigo)
                         crud.eliminarRol(codigo)
-                          
+                    
+                    case 5:
+                        print("Vas a eliminar un Detalle Proyecto")
+                        crud.lectura("DetalleProyectos")
+                        codEmp = input("Introduce el codigo de empleado -> ")
+                        codProye = input("Ahora introduce el de proyecto -> ")
+                        rol = input("Y por último introduce el rol -> ")
+                        crud.eliminarDetalle(codEmp,codProye,rol)
+                        
                     case _:
                         print("Saliendo o no implementado")                       
 
