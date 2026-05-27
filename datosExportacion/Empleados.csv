@@ -1,0 +1,16 @@
+codEmpleado;codDepto;nomEmpleado;ape1Empleado;ape2Empleado;fecIniEmp;fecFinEmp;edad
+2;3;Manolito;Canalejas;Boli;2026-05-07;;33
+3;;Pedrito;Pica;Piedras;2002-05-07;2026-05-07;21
+4;2;Paco;Sancho;;2025-01-05;;18
+8;7;Juan;García;;2007-11-29;;25
+9;4;María;López;;2023-12-02;;30
+10;6;Carlos;Martínez;;2003-04-15;;19
+11;;Ana;Sánchez;;2026-05-06;2026-05-07;42
+12;2;Lucía;Fernández;;2012-08-21;;18
+13;5;Pedro;Ruiz;;2020-10-07;;35
+14;7;Manolito;Canalejas;Boli;2021-11-11;;33
+15;4;Ana;Less;;1900-01-01;;43
+17;6;Paco;Merte;;0001-01-01;;72
+18;;Benito;Camela;Unpar;2026-05-15;;49
+24;;Beni;Toca;Mela;2020-01-01;;34
+25;;Boba;Fetty;;;;44

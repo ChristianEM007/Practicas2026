@@ -1,0 +1,15 @@
+codRol;nomRol;descripcion
+1;Plantilla;Inicio del proyecto
+2;Jefe de Proyecto;Responsable de la planificación, supervisión y entrega del proyecto
+3;Analista;Encargado del análisis de requisitos y diseño funcional
+4;Desarrollador;Implementa el código y las funcionalidades del sistema
+5;Tester;Realiza pruebas para detectar errores y validar el software
+6;Soporte;Da asistencia técnica y mantenimiento a los sistemas
+7;Administrador BD;Gestiona y mantiene las bases de datos del sistema
+8;Jefe de Proyecto;Responsable de la planificación, supervisión y entrega del proyecto
+9;Analista;Encargado del análisis de requisitos y diseño funcional
+10;Desarrollador;Implementa el código y las funcionalidades del sistema
+11;Tester;Realiza pruebas para detectar errores y validar el software
+12;Soporte;Da asistencia técnica y mantenimiento a los sistemas
+13;Administrador BD;Gestiona y mantiene las bases de datos del sistema
+14;RolePlay;Gameplay de GTAV RolePlay

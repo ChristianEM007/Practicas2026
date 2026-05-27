@@ -10,18 +10,16 @@ try:
     if conn:
         print("Conectado correctamente")
 except: pass
-finally:
-    conn.close
     
 cursor = conn.cursor()
 
 #------------------------------------------------------------------- Lecturas -------------------------------------------------------------------
 def lectura(tabla):
-    print("Buscando ...")
-    cursor.execute(f"SELECT * FROM {tabla}")
-    for row in cursor.fetchall():
-        print(" ",row)
-    print("Listo")
+    query = f"SELECT * FROM {tabla}"
+    cursor.execute(query)
+    filas = cursor.fetchall()
+    return filas
+    
     
 def lecturaDepto(codigo):
     print("...")
@@ -69,15 +67,15 @@ def insertarDepto(nombre,ubicacion):
     except pyodbc.Error as e:
         print(f"Ooops FATAL ERROR -> {e}")
     
-def insertarEmple(nombre,ape1,ape2,fecIni,edad):
+def insertarEmple(depto,nombre,ape1,ape2,fecIni,edad):
     try:
-        cursor.execute("INSERT INTO Empleados(nomEmpleado,ape1Empleado,ape2Empleado,fecIniEmp,edad) values(?,?,?,?,?)",
-                (nombre,ape1,ape2,fecIni,edad,)
+        cursor.execute("INSERT INTO Empleados(codDepto,nomEmpleado,ape1Empleado,ape2Empleado,fecIniEmp,edad) values(?,?,?,?,?,?)",
+                (depto,nombre,ape1,ape2,fecIni,edad,)
                     )
         conn.commit()
         print("Insertado Perfectamente")
-    except pyodbc.Error:
-        print("Ooops los campos fecha o edad estan mal")
+    except pyodbc.Error as e:
+        print(f"Ooops los campos fecha o edad estan mal -> {e}")
 
 def insertarProye(nombre,fecIni):
     try:
@@ -115,9 +113,9 @@ def actualizarDepto(nombre,ubicacion,codigo):
     conn.commit()
     print("Actualizado satisfactoriamente")
     
-def actualizarEmple(codigoDepto,nombre,ape1,ape2,fecFin,edad,codEmp):
-    cursor.execute("UPDATE Empleados SET codDepto = ?, nomEmpleado = ?, ape1Empleado = ?, ape2Empleado = ?, fecIniEmp = ?, edad = ?  WHERE codEmpleado = ?",
-               (codigoDepto,nombre,ape1,ape2,fecFin,edad,codEmp,)
+def actualizarEmple(codigoDepto,nombre,ape1,ape2,inicio,fecFin,edad,codEmp):
+    cursor.execute("UPDATE Empleados SET codDepto = ?, nomEmpleado = ?, ape1Empleado = ?, ape2Empleado = ?, fecIniEmp = ?, fecIniEmp = ?, edad = ?  WHERE codEmpleado = ?",
+               (codigoDepto,nombre,ape1,ape2,inicio,fecFin,edad,codEmp,)
               )
     conn.commit()
     print("Actualizado satisfactoriamente")
