@@ -15,57 +15,81 @@ cursor = conn.cursor()
 
 #------------------------------------------------------------------- Lecturas -------------------------------------------------------------------
 def lectura(tabla):
-    query = f"SELECT * FROM {tabla}"
-    cursor.execute(query)
-    filas = cursor.fetchall()
-    return filas
-
+    try:
+        query = f"SELECT * FROM {tabla}"
+        cursor.execute(query)
+        filas = cursor.fetchall()
+        return filas
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
+        
 def lecturaGeneral(tabla):
-    cursor.execute(f"SELECT * FROM {tabla}")
-    for row in cursor.fetchall():
-        print(" ",row)
-    
+    try:
+        cursor.execute(f"SELECT * FROM {tabla}")
+        for row in cursor.fetchall():
+            print(" ",row)
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
+        
 def lecturaDepto(codigo):
-    print("...")
-    cursor.execute(f"SELECT * FROM Departamentos Where codDepto = {codigo}")
-    for row in cursor.fetchall():
-        print(" ",row)
-    print("...")
+    try:    
+        print("...")
+        cursor.execute(f"SELECT * FROM Departamentos Where codDepto = {codigo}")
+        for row in cursor.fetchall():
+            print(" ",row)
+        print("...")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
 
 def lecturaEmple(codigo):
-    print("...")
-    cursor.execute(f"SELECT * FROM Empleados Where codEmpleado = {codigo}")
-    for row in cursor.fetchall():
-        print(" ",row)
-    print("...")
+    try:
+        print("...")
+        cursor.execute(f"SELECT * FROM Empleados Where codEmpleado = {codigo}")
+        for row in cursor.fetchall():
+            print(" ",row)
+        print("...")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
     
 def lecturaProye(codigo):
-    print("...")
-    cursor.execute(f"SELECT * FROM Proyectos Where codProyecto = {codigo}")
-    for row in cursor.fetchall():
-        print(" ",row)
-    print("...")
+    try:
+        print("...")
+        cursor.execute(f"SELECT * FROM Proyectos Where codProyecto = {codigo}")
+        for row in cursor.fetchall():
+            print(" ",row)
+        print("...")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
     
 def lecturaRol(codigo):
-    print("...")
-    cursor.execute(f"SELECT * FROM Roles Where codRol = {codigo}")
-    for row in cursor.fetchall():
-        print(" ",row)
-    print("...")
-    
+    try:
+        print("...")
+        cursor.execute(f"SELECT * FROM Roles Where codRol = {codigo}")
+        for row in cursor.fetchall():
+            print(" ",row)
+        print("...")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
+        
 def lecturaDetalle(codigoE,codigoP,rol):
-    print("...")
-    cursor.execute(f"SELECT * FROM DealleProyectos Where codEmple = {codigoE} and codProye = {codigoP} and rol = {rol}")
-    for row in cursor.fetchall():
-        print(" ",row)
-    print("...")
+    try:
+        print("...")
+        cursor.execute(f"SELECT * FROM DealleProyectos Where codEmple = {codigoE} and codProye = {codigoP} and rol = {rol}")
+        for row in cursor.fetchall():
+            print(" ",row)
+        print("...")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
     
 def lecturaHistorial(codigo):
-    print("...")
-    cursor.execute(f"SELECT * FROM HistorialAccesos Where codAcceso = {codigo}")
-    for row in cursor.fetchall():
-        print(" ",row)
-    print("...")
+    try:
+        print("...")
+        cursor.execute(f"SELECT * FROM HistorialAccesos Where codAcceso = {codigo}")
+        for row in cursor.fetchall():
+            print(" ",row)
+        print("...")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
     
 #------------------------------------------------------------------- Inserciones -------------------------------------------------------------------
 def insertarDepto(nombre,ubicacion):
@@ -127,44 +151,62 @@ def insertaHistorial(fecha,tipo,emple,detalle):
         print(f"Ooops FATAL ERROR -> {e}")
 #------------------------------------------------------------------- Actualizaciones -------------------------------------------------------------------
 def actualizarDepto(nombre,ubicacion,codigo):
-    cursor.execute("UPDATE Departamentos SET nomDepto = ?, ubicacion = ? WHERE codDepto = ?",
-               (nombre,ubicacion,codigo,)
-              )
-    conn.commit()
-    print("Actualizado correctamente")
+    try:
+        cursor.execute("UPDATE Departamentos SET nomDepto = ?, ubicacion = ? WHERE codDepto = ?",
+                (nombre,ubicacion,codigo,)
+                )
+        conn.commit()
+        print("Actualizado correctamente")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
     
 def actualizarEmple(codigoDepto,nombre,ape1,ape2,inicio,fecFin,edad,codEmp):
-    cursor.execute("UPDATE Empleados SET codDepto = ?, nomEmpleado = ?, ape1Empleado = ?, ape2Empleado = ?, fecIniEmp = ?, fecIniEmp = ?, edad = ?  WHERE codEmpleado = ?",
-               (codigoDepto,nombre,ape1,ape2,inicio,fecFin,edad,codEmp,)
-              )
-    conn.commit()
-    print("Actualizado correctamente")
-    
+    try:
+        cursor.execute("UPDATE Empleados SET codDepto = ?, nomEmpleado = ?, ape1Empleado = ?, ape2Empleado = ?, fecIniEmp = ?, fecIniEmp = ?, edad = ?  WHERE codEmpleado = ?",
+                (codigoDepto,nombre,ape1,ape2,inicio,fecFin,edad,codEmp,)
+                )
+        conn.commit()
+        print("Actualizado correctamente")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
+        
 def actualizarProye(codProye,nombre,fechaFin):
-    cursor.execute("UPDATE Proyectos SET nomProyecto = ?, fechaFin = ? WHERE codProyecto = ?",
-                   (nombre,fechaFin,codProye)
-                   )
-    conn.commit()
-    print("Actualizado correctamente")
+    try:
+        cursor.execute("UPDATE Proyectos SET nomProyecto = ?, fechaFin = ? WHERE codProyecto = ?",
+                    (nombre,fechaFin,codProye)
+                    )
+        conn.commit()
+        print("Actualizado correctamente")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
     
 def actualizarRol(nombre,descripcion,codigo):
-    cursor.execute("UPDATE Roles SET nomRol = ?, descripcion = ? WHERE codRol = ?",
-                   (nombre,descripcion,codigo)
-                   )
-    conn.commit()
-    print("Actualizado correctamente")
+    try:
+        cursor.execute("UPDATE Roles SET nomRol = ?, descripcion = ? WHERE codRol = ?",
+                    (nombre,descripcion,codigo)
+                    )
+        conn.commit()
+        print("Actualizado correctamente")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
     
 def actualizaDetalle(codEmple,codProye,rol,horas):
-    cursor.execute("UPDATE DetalleProyectos SET horasAsignadas = ? WHERE codEmple = ? and codProye = ? and rol = ?",
-                   (horas,codEmple,codProye,rol))
-    conn.commit()
-    print("Actualizado correctamente")
+    try:
+        cursor.execute("UPDATE DetalleProyectos SET horasAsignadas = ? WHERE codEmple = ? and codProye = ? and rol = ?",
+                    (horas,codEmple,codProye,rol))
+        conn.commit()
+        print("Actualizado correctamente")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
     
 def actualizaAcceso(emple,detalle,codAcceso):
-    cursor.execute("UPDATE HistorialAccesos SET codEmpleado = ?, detalle = ? WHERE codAcceso = ?",
-                   (emple,detalle,codAcceso))
-    conn.commit()
-    print("Actualizado correctamente")
+    try:
+        cursor.execute("UPDATE HistorialAccesos SET codEmpleado = ?, detalle = ? WHERE codAcceso = ?",
+                    (emple,detalle,codAcceso))
+        conn.commit()
+        print("Actualizado correctamente")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
     
 #------------------------------------------------------------------- Eliminaciones -------------------------------------------------------------------
 def eliminarDepto(codigo):
@@ -223,5 +265,5 @@ def eliminarHistorial(codigo):
         conn.commit()
         print("Eliminado satisfactoriamente")
     except pyodbc.Error as e:
-        print(f"Ooooupssssy FATAL ERROR in DetalleProyectos -> {e}")
+        print(f"Ooooupssssy FATAL ERROR in Historial Accesos -> {e}")
     

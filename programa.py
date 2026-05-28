@@ -62,6 +62,8 @@ while(salida != "si"):
                             tabla = "Departamentos"
                             print(f"Leyendo {tabla}")
                             filas = crud.lectura(tabla)
+                            columnas = [col[0] for col in crud.cursor.description]
+                            print(columnas)
                             for consulta in filas:
                                 print(consulta)
                                 
@@ -72,6 +74,8 @@ while(salida != "si"):
                             tabla = "Empleados"
                             print(f"Leyendo {tabla}")
                             filas = crud.lectura(tabla)
+                            columnas = [col[0] for col in crud.cursor.description]
+                            print(columnas)
                             for consulta in filas:
                                 print(consulta)
                                 
@@ -82,6 +86,8 @@ while(salida != "si"):
                             tabla = "Proyectos"
                             print(f"Leyendo {tabla}")
                             filas = crud.lectura(tabla)
+                            columnas = [col[0] for col in crud.cursor.description]
+                            print(columnas)
                             for consulta in filas:
                                 print(consulta)
                                 
@@ -92,6 +98,8 @@ while(salida != "si"):
                             tabla = "Roles"
                             print(f"Leyendo {tabla}")
                             filas = crud.lectura(tabla)
+                            columnas = [col[0] for col in crud.cursor.description]
+                            print(columnas)
                             for consulta in filas:
                                 print(consulta)
                                 
@@ -102,6 +110,8 @@ while(salida != "si"):
                             tabla = "DetalleProyectos"
                             print(f"Leyendo {tabla}")
                             filas = crud.lectura(tabla)
+                            columnas = [col[0] for col in crud.cursor.description]
+                            print(columnas)
                             for consulta in filas:
                                 print(consulta)
                                 
@@ -112,11 +122,13 @@ while(salida != "si"):
                             tabla = "HistorialAccesos"
                             print(f"Leyendo {tabla}")
                             filas = crud.lectura(tabla)
+                            columnas = [col[0] for col in crud.cursor.description]
+                            print(columnas)
                             for consulta in filas:
                                 print(consulta)
                                 
                             exportacion = input("Desea exportar? -> ")
-                            columnas = [col[0] for col in crud.cursor.description]
+                            
                             
                         case _:
                             print("Saliendo de aqui")
