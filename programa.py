@@ -1,5 +1,6 @@
 #christian
 import datetime
+from datetime import datetime
 import crud
 import csv
 
@@ -108,7 +109,6 @@ while(salida != "si"):
                             columnas = [col[0] for col in crud.cursor.description]
                             
                         case 6:
-                            print("En fase de pruebas, vuelve más tarde")
                             tabla = "HistorialAccesos"
                             print(f"Leyendo {tabla}")
                             filas = crud.lectura(tabla)
@@ -146,7 +146,7 @@ while(salida != "si"):
                         
                     case 2:
                         print("Vas a insertar en Empleados") 
-                        crud.lectura("Departamentos")
+                        crud.lecturaGeneral("Departamentos")
                         depto = input("Introduce el codigo de depto (deja en blanco si no tiene deparamento de momento) -> ")
                         if(depto != ""):
                             depto = int(depto)
@@ -181,11 +181,11 @@ while(salida != "si"):
                         print("Vas a insertar en Detalle Proyectos")
                         
                         print("Tabla de Proyectos:")
-                        crud.lectura("Proyectos")
+                        crud.lecturaGeneral("Proyectos")
                         codProye = input("Introduce el codigo de Proyecto -> ")
                         
                         print("Tabla de Empleados:")
-                        crud.lectura("Empleados")
+                        crud.lecturaGeneral("Empleados")
                         codEmp = input("Ahora introduzca el codigo del empleado -> ")
                         
                         print("Tabla de Roles:")
@@ -193,6 +193,15 @@ while(salida != "si"):
                         codRol = input("Introduce ahora el codigo de Rol -> ")
                         horas = input("Por ultimo intdroduce las horas asignadas que tendra este empleado -> ")
                         crud.insertaDetalle(codEmp,codProye,codRol,horas)
+                    
+                    case 6:
+                        print("Vas a insertar en Historial de Accesos")
+                        fecha = datetime.now()
+                        tipo = input("Entrada (1) o salida (0)? -> ")
+                        crud.lecturaGeneral("Empleados")
+                        emple = input("¿Qué empleado eres? -> ")
+                        detalle = input("Descripción -> ")
+                        crud.insertaHistorial(fecha,tipo,emple,detalle)
                     
                     case _:
                         print("Saliendo o no implementado")
@@ -203,18 +212,18 @@ while(salida != "si"):
                 match (menu4):
                     case 1:
                         print("Vas a actualizar Departamentos")
-                        crud.lectura("Departamentos")
+                        crud.lecturaGeneral("Departamentos")
                         codigo = int(input("Introduce el Codigo del Departamento a actualizar -> "))
-                        crud.lectura(codigo)
+                        crud.lecturaGeneral(codigo)
                         nombre = input("Ahora introduce el nuevo nombre del Departamento -> ")
                         ubicacion = input("Por último introduce la nueva Ubicacion -> ")
                         crud.actualizarDepto(nombre,ubicacion,codigo)
                         
                     case 2:
                         print("Vas a actualizar Empleados")
-                        crud.lectura("Empleados")
+                        crud.lecturaGeneral("Empleados")
                         codEmp = int(input("Cual es el codigo del Empleado a actualizar? -> "))
-                        crud.lecturaEmple(codEmp)
+                        crud.lecturaGeneral(codEmp)
                         codigoDepto = input("Escriba el nuevo o el actual Departamento -> ")
                         if(codigoDepto != ""):
                             codigoDepto = int(codigoDepto)
@@ -240,7 +249,7 @@ while(salida != "si"):
                         
                     case 3:
                         print("Vas a actualizar en Proyectos")
-                        crud.lectura("Proyectos")
+                        crud.lecturaGeneral("Proyectos")
                         codProye = int(input("Cual es el codigo del Proyecto a actualizar? -> "))
                         crud.lecturaProye(codProye)
                         nombre = input("Introduce el nuevo o actual nombre del Proyecto -> ")
@@ -254,7 +263,7 @@ while(salida != "si"):
                         
                     case 4:
                         print("Vas a actualizar en Roles")
-                        crud.lectura("Roles")
+                        crud.lecturaGeneral("Roles")
                         codRol = int(input("Introduce el codigo a actualizar -> "))
                         crud.lecturaRol(codRol)
                         nombre = input("Introduce ahora el nuevo o actual nombre -> ")
@@ -264,13 +273,23 @@ while(salida != "si"):
                         
                     case 5:
                         print("Vas a actualizar en Detalle Proyectos")
-                        crud.lectura("DetalleProyectos")
+                        crud.lecturaGeneral("DetalleProyectos")
                         codEmple = input("Introduce el codigo de Empleado -> ")
                         codProye = input("Ahora el codigo de Proyecto ->")
                         rol = input("Introduce el codigo de Rol -> ")
                         crud.lecturaDetalle(codEmple,codProye,rol)
                         horas = input("Introduce las horas que quería cambiar -> ")
                         crud.actualizaDetalle(codEmple,codProye,rol,horas)
+                        
+                    case 6:
+                        print("Vas a actualizar Historial Accesos")
+                        crud.lecturaGeneral("HistorialAccesos")
+                        codAcceso = int(input("Escriba el codigo de Acceso a cambiar -> "))
+                        crud.lecturaGeneral("Empleados")
+                        crud.lecturaHistorial(codAcceso)
+                        emple = int(input("Codigo del empleado nuevo o actual -> "))
+                        detalle = input("Detalle nuevo o actual -> ")
+                        crud.actualizaAcceso(emple,detalle,codAcceso)
                         
                     case _:
                         print("Saliendo o no implementado")
@@ -280,7 +299,7 @@ while(salida != "si"):
                 match (menu5):
                     case 1:
                         print("Vas a eliminar un Departamento")
-                        crud.lectura("Departamentos")
+                        crud.lecturaGeneral("Departamentos")
                         codigo = int(input("Introduce el Codigo a Eliminar -> "))
                         print("ELIMINANDO DEPARTAMENTO -> ")
                         crud.lecturaDepto(codigo)
@@ -288,7 +307,7 @@ while(salida != "si"):
                         
                     case 2:
                         print("Vas a eliminar un Empleado")
-                        crud.lectura("Empleados")
+                        crud.lecturaGeneral("Empleados")
                         codigo = int(input("Introduce el Codigo a Eliminar -> "))
                         print("ELIMINANDO EMPLEADO -> ")
                         crud.lecturaEmple(codigo)
@@ -296,7 +315,7 @@ while(salida != "si"):
                         
                     case 3:
                         print("Vas a eliminar un Proyecto")
-                        crud.lectura("Proyectos")
+                        crud.lecturaGeneral("Proyectos")
                         codigo = int(input("Introduce el codigo a eliminar -> "))
                         print("EXTERMINANDO PROYECTO ->")
                         crud.lecturaProye(codigo)
@@ -304,7 +323,7 @@ while(salida != "si"):
                         
                     case 4:
                         print("Vas a eliminar un Rol")
-                        crud.lectura("Roles")
+                        crud.lecturaGeneral("Roles")
                         codigo = int(input("Introduce el codigo a eliminar -> "))
                         print("EXTERMINANDO ROL ->")
                         crud.lecturaRol(codigo)
@@ -312,11 +331,17 @@ while(salida != "si"):
                     
                     case 5:
                         print("Vas a eliminar un Detalle Proyecto")
-                        crud.lectura("DetalleProyectos")
+                        crud.lecturaGeneral("DetalleProyectos")
                         codEmp = input("Introduce el codigo de empleado -> ")
                         codProye = input("Ahora introduce el de proyecto -> ")
                         rol = input("Y por último introduce el rol -> ")
                         crud.eliminarDetalle(codEmp,codProye,rol)
+                        
+                    case 6:
+                        print("Vas a eliminar un Historial de Accesos")
+                        crud.lecturaGeneral("HistorialAccesos")
+                        codigo = input("Introduce el codigo de Acceso -> ")
+                        crud.eliminarHistorial(codigo)
                         
                     case _:
                         print("Saliendo o no implementado")                       
@@ -330,4 +355,3 @@ while(salida != "si"):
 
 crud.cursor.close()
 print("Adiós, no vuelvas más!")
-crud.conn.close()

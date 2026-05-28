@@ -19,7 +19,11 @@ def lectura(tabla):
     cursor.execute(query)
     filas = cursor.fetchall()
     return filas
-    
+
+def lecturaGeneral(tabla):
+    cursor.execute(f"SELECT * FROM {tabla}")
+    for row in cursor.fetchall():
+        print(" ",row)
     
 def lecturaDepto(codigo):
     print("...")
@@ -52,6 +56,13 @@ def lecturaRol(codigo):
 def lecturaDetalle(codigoE,codigoP,rol):
     print("...")
     cursor.execute(f"SELECT * FROM DealleProyectos Where codEmple = {codigoE} and codProye = {codigoP} and rol = {rol}")
+    for row in cursor.fetchall():
+        print(" ",row)
+    print("...")
+    
+def lecturaHistorial(codigo):
+    print("...")
+    cursor.execute(f"SELECT * FROM HistorialAccesos Where codAcceso = {codigo}")
     for row in cursor.fetchall():
         print(" ",row)
     print("...")
@@ -105,40 +116,55 @@ def insertaDetalle(codEmple,codProye,rol,horas):
     except pyodbc.Error as e:
         print(f"Ooops FATAL ERROR -> {e}")
         
+def insertaHistorial(fecha,tipo,emple,detalle):
+    try:
+        cursor.execute("INSERT INTO HistorialAccesos(fechaAcceso,tipoAcceso,codEmpleado,detalle) values(?,?,?,?)",
+                    (fecha,tipo,emple,detalle) 
+                    )
+        conn.commit()
+        print("Insertado Perfectamente")
+    except pyodbc.Error as e:
+        print(f"Ooops FATAL ERROR -> {e}")
 #------------------------------------------------------------------- Actualizaciones -------------------------------------------------------------------
 def actualizarDepto(nombre,ubicacion,codigo):
     cursor.execute("UPDATE Departamentos SET nomDepto = ?, ubicacion = ? WHERE codDepto = ?",
                (nombre,ubicacion,codigo,)
               )
     conn.commit()
-    print("Actualizado satisfactoriamente")
+    print("Actualizado correctamente")
     
 def actualizarEmple(codigoDepto,nombre,ape1,ape2,inicio,fecFin,edad,codEmp):
     cursor.execute("UPDATE Empleados SET codDepto = ?, nomEmpleado = ?, ape1Empleado = ?, ape2Empleado = ?, fecIniEmp = ?, fecIniEmp = ?, edad = ?  WHERE codEmpleado = ?",
                (codigoDepto,nombre,ape1,ape2,inicio,fecFin,edad,codEmp,)
               )
     conn.commit()
-    print("Actualizado satisfactoriamente")
-
+    print("Actualizado correctamente")
+    
 def actualizarProye(codProye,nombre,fechaFin):
     cursor.execute("UPDATE Proyectos SET nomProyecto = ?, fechaFin = ? WHERE codProyecto = ?",
                    (nombre,fechaFin,codProye)
                    )
     conn.commit()
-    print("Actualizado satisfactoriamente")
+    print("Actualizado correctamente")
     
 def actualizarRol(nombre,descripcion,codigo):
     cursor.execute("UPDATE Roles SET nomRol = ?, descripcion = ? WHERE codRol = ?",
                    (nombre,descripcion,codigo)
                    )
     conn.commit()
-    print("Actualizado satisfactoriamente")
+    print("Actualizado correctamente")
     
 def actualizaDetalle(codEmple,codProye,rol,horas):
-    cursor.execute("UPDATE DetalleProyectos SET horasAsignadas = ?, WHERE codEmple = ? and codProye = ? and rol = ?",
+    cursor.execute("UPDATE DetalleProyectos SET horasAsignadas = ? WHERE codEmple = ? and codProye = ? and rol = ?",
                    (horas,codEmple,codProye,rol))
     conn.commit()
-    print("Actualizado satisfactoriamente")
+    print("Actualizado correctamente")
+    
+def actualizaAcceso(emple,detalle,codAcceso):
+    cursor.execute("UPDATE HistorialAccesos SET codEmpleado = ?, detalle = ? WHERE codAcceso = ?",
+                   (emple,detalle,codAcceso))
+    conn.commit()
+    print("Actualizado correctamente")
     
 #------------------------------------------------------------------- Eliminaciones -------------------------------------------------------------------
 def eliminarDepto(codigo):
@@ -190,3 +216,12 @@ def eliminarDetalle(codEmple,codProye,rol):
     except pyodbc.Error as e:
         print(f"Ooooupssssy FATAL ERROR in DetalleProyectos -> {e}")
 
+def eliminarHistorial(codigo):
+    try:
+        cursor.execute("DELETE FROM HistorialAccesos WHERE codAcceso = ?",
+                        (codigo,))
+        conn.commit()
+        print("Eliminado satisfactoriamente")
+    except pyodbc.Error as e:
+        print(f"Ooooupssssy FATAL ERROR in DetalleProyectos -> {e}")
+    
