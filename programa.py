@@ -144,7 +144,7 @@ while(salida != "si"):
                             print("Saliendo de aqui")
                             
                 if(exportacion == "si"):
-                    with open(f"{tabla}.csv", "w", newline="", encoding="utf-8") as archivo:
+                    with open(f"Practicas2026/datosExportacion/{tabla}.csv", "w", newline="", encoding="utf-8") as archivo:
                         writer = csv.writer(archivo, delimiter=";")
 
                         # Cabecera
@@ -243,7 +243,7 @@ while(salida != "si"):
                         print("Vas a actualizar Departamentos")
                         crud.lecturaGeneral("Departamentos")
                         codigo = int(input("Introduce el Codigo del Departamento a actualizar -> "))
-                        crud.lecturaGeneral(codigo)
+                        crud.lecturaDepto(codigo)
                         nombre = input("Ahora introduce el nuevo nombre del Departamento -> ")
                         ubicacion = input("Por último introduce la nueva Ubicacion -> ")
                         crud.actualizarDepto(nombre,ubicacion,codigo)
