@@ -34,7 +34,7 @@ def lecturaGeneral(tabla):
 def lecturaDepto(codigo):
     try:    
         print("...")
-        cursor.execute(f"SELECT * FROM Departamentos Where codDepto = {codigo}")
+        cursor.execute(f"SELECT * FROM Departamentos WHERE codDepto = {codigo}")
         for row in cursor.fetchall():
             print(" ",row)
         print("...")
@@ -44,7 +44,7 @@ def lecturaDepto(codigo):
 def lecturaEmple(codigo):
     try:
         print("...")
-        cursor.execute(f"SELECT * FROM Empleados Where codEmpleado = {codigo}")
+        cursor.execute(f"SELECT * FROM Empleados WHERE codEmpleado = {codigo}")
         for row in cursor.fetchall():
             print(" ",row)
         print("...")
@@ -54,7 +54,7 @@ def lecturaEmple(codigo):
 def lecturaProye(codigo):
     try:
         print("...")
-        cursor.execute(f"SELECT * FROM Proyectos Where codProyecto = {codigo}")
+        cursor.execute(f"SELECT * FROM Proyectos WHERE codProyecto = {codigo}")
         for row in cursor.fetchall():
             print(" ",row)
         print("...")
@@ -64,7 +64,7 @@ def lecturaProye(codigo):
 def lecturaRol(codigo):
     try:
         print("...")
-        cursor.execute(f"SELECT * FROM Roles Where codRol = {codigo}")
+        cursor.execute(f"SELECT * FROM Roles WHERE codRol = {codigo}")
         for row in cursor.fetchall():
             print(" ",row)
         print("...")
@@ -74,7 +74,7 @@ def lecturaRol(codigo):
 def lecturaDetalle(codigoE,codigoP,rol):
     try:
         print("...")
-        cursor.execute(f"SELECT * FROM DealleProyectos Where codEmple = {codigoE} and codProye = {codigoP} and rol = {rol}")
+        cursor.execute(f"SELECT * FROM DealleProyectos WHERE codEmple = {codigoE} and codProye = {codigoP} and rol = {rol}")
         for row in cursor.fetchall():
             print(" ",row)
         print("...")
@@ -84,7 +84,17 @@ def lecturaDetalle(codigoE,codigoP,rol):
 def lecturaHistorial(codigo):
     try:
         print("...")
-        cursor.execute(f"SELECT * FROM HistorialAccesos Where codAcceso = {codigo}")
+        cursor.execute(f"SELECT * FROM HistorialAccesos WHERE codAcceso = {codigo}")
+        for row in cursor.fetchall():
+            print(" ",row)
+        print("...")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
+
+def lecturaSeguridad(codigo):
+    try:
+        print("...")
+        cursor.execute(f"SELECT * FROM Seguridad WHERE codSeguridad = {codigo}")
         for row in cursor.fetchall():
             print(" ",row)
         print("...")
@@ -149,6 +159,18 @@ def insertaHistorial(fecha,tipo,emple,detalle):
         print("Insertado Perfectamente")
     except pyodbc.Error as e:
         print(f"Ooops FATAL ERROR -> {e}")
+
+def insertaSeguridad(codEmple,fecha):
+    try:
+        cursor.execute("INSERT INTO Seguridad(codEmple,fecIniSeg) values(?,?)",
+                    (codEmple,fecha) 
+                    )
+        conn.commit()
+        print("Insertado Perfectamente")
+    except pyodbc.Error as e:
+        print(f"Ooops FATAL ERROR -> {e}")
+
+
 #------------------------------------------------------------------- Actualizaciones -------------------------------------------------------------------
 def actualizarDepto(nombre,ubicacion,codigo):
     try:
@@ -207,6 +229,16 @@ def actualizaAcceso(emple,detalle,codAcceso):
         print("Actualizado correctamente")
     except pyodbc.Error as e:
         print(f"OOUPSY error -> {e}")
+
+def actualizaSeguridad(codEmp,fecha,codigo):
+    try:
+        cursor.execute("UPDATE Seguridad SET codEmple = ?, fecIniSeg = ? WHERE codSeguridad = ?",
+                    (codEmp,fecha,codigo))
+        conn.commit()
+        print("Actualizado correctamente")
+    except pyodbc.Error as e:
+        print(f"OOUPSY error -> {e}")
+    
     
 #------------------------------------------------------------------- Eliminaciones -------------------------------------------------------------------
 def eliminarDepto(codigo):
@@ -261,6 +293,15 @@ def eliminarDetalle(codEmple,codProye,rol):
 def eliminarHistorial(codigo):
     try:
         cursor.execute("DELETE FROM HistorialAccesos WHERE codAcceso = ?",
+                        (codigo,))
+        conn.commit()
+        print("Eliminado satisfactoriamente")
+    except pyodbc.Error as e:
+        print(f"Ooooupssssy FATAL ERROR in Historial Accesos -> {e}")
+
+def eliminarSegurata(codigo):
+    try:
+        cursor.execute("DELETE FROM Seguridad WHERE codSeguridad = ?",
                         (codigo,))
         conn.commit()
         print("Eliminado satisfactoriamente")

@@ -16,6 +16,7 @@ def subMenu():
                    |    4.-Roles                |
                    |    5.-Detalle Proyectos    |
                    |    6.-Historial Acc.       |
+                   |    7.-Seguridad            |
                    |                            |
                    |    0.-Salir                |
                     ---------------------------- 
@@ -26,11 +27,11 @@ def subMenu():
         
 def exportacion():
     try:
-        menu = input("Desea exportar? -> """)
+        menu = input("Desea exportar? -> ")
         return menu
     
-    except ValueError:
-        print("Oops!  That was no valid number.  Try again idiot")          
+    except ValueError as e:
+        print(f"Oops! fatal error. {e}")
 
 
 salida = "no"
@@ -128,7 +129,16 @@ while(salida != "si"):
                                 print(consulta)
                                 
                             exportacion = input("Desea exportar? -> ")
+                        case 7:
+                            tabla = "Seguridad"    
+                            print(f"Leyendo {tabla}")
+                            filas = crud.lectura(tabla)
+                            columnas = [col[0] for col in crud.cursor.description]
+                            print(columnas)
+                            for consulta in filas:
+                                print(consulta)
                             
+                            exportacion = input("Desea exportar? ->")
                             
                         case _:
                             print("Saliendo de aqui")
@@ -170,7 +180,7 @@ while(salida != "si"):
                         ape2 = input("Ahora introduce el segundo apellido -> ")
                         inicio = input("Ahora introduce cuando entrará a trabajar (yyyy-mm-dd) -> ")
                         if(inicio != ""):
-                            inicio = datetime.datetime.strptime(inicio,"%Y-%m-%d").date()
+                            inicio = datetime.strptime(inicio,"%Y-%m-%d").date()
                         else:
                             inicio = None
                             
@@ -180,7 +190,7 @@ while(salida != "si"):
                     case 3:
                         print("Vas a insertar en Proyectos")
                         nombre = input("Introduzca el nombre del Proyecto -> ")
-                        fecIni = datetime.datetime.strptime(input("Ahora introduce la fecha de inicio (yyyy-mm-dd) -> "),"%Y-%m-%d").date()
+                        fecIni = datetime.strptime(input("Ahora introduce la fecha de inicio (yyyy-mm-dd) -> "),"%Y-%m-%d").date()
                         crud.insertarProye(nombre,fecIni)
                     
                     case 4:
@@ -214,7 +224,14 @@ while(salida != "si"):
                         emple = input("¿Qué empleado eres? -> ")
                         detalle = input("Descripción -> ")
                         crud.insertaHistorial(fecha,tipo,emple,detalle)
-                    
+                        
+                    case 7:
+                        print("Vas a insertar en Seguridad")
+                        crud.lecturaGeneral("Empleados")
+                        codigoEmp = int(input("Introduce el codigo de empleado -> "))
+                        fecha =  datetime.strptime(input("Ahora introduce la fecha de inicio (yyyy-mm-dd) -> "),"%Y-%m-%d").date()
+                        crud.insertaSeguridad(codigoEmp,fecha)
+                        
                     case _:
                         print("Saliendo o no implementado")
                 
@@ -302,6 +319,15 @@ while(salida != "si"):
                         emple = int(input("Codigo del empleado nuevo o actual -> "))
                         detalle = input("Detalle nuevo o actual -> ")
                         crud.actualizaAcceso(emple,detalle,codAcceso)
+                    
+                    case 7:
+                        print("Vas a actualizar Seguridad")
+                        crud.lecturaGeneral("Seguridad")
+                        codigo = int(input("Introduce el codigo del Segurata -> "))
+                        crud.lecturaSeguridad(codigo)
+                        codigoEmp = int(input("Ahora introduce el codigo del actual o nuevo Empleado -> "))
+                        fecha =  datetime.strptime(input("Por último introduce la fecha de inicio (yyyy-mm-dd) -> "),"%Y-%m-%d").date()
+                        crud.actualizaSeguridad(codigoEmp,fecha,codigo)
                         
                     case _:
                         print("Saliendo o no implementado")
@@ -344,16 +370,22 @@ while(salida != "si"):
                     case 5:
                         print("Vas a eliminar un Detalle Proyecto")
                         crud.lecturaGeneral("DetalleProyectos")
-                        codEmp = input("Introduce el codigo de empleado -> ")
-                        codProye = input("Ahora introduce el de proyecto -> ")
-                        rol = input("Y por último introduce el rol -> ")
+                        codEmp = int(input("Introduce el codigo de empleado -> "))
+                        codProye = int(input("Ahora introduce el de proyecto -> "))
+                        rol = int(input("Y por último introduce el rol -> "))
                         crud.eliminarDetalle(codEmp,codProye,rol)
                         
                     case 6:
                         print("Vas a eliminar un Historial de Accesos")
                         crud.lecturaGeneral("HistorialAccesos")
-                        codigo = input("Introduce el codigo de Acceso -> ")
+                        codigo = int(input("Introduce el codigo de Acceso -> "))
                         crud.eliminarHistorial(codigo)
+                    
+                    case 7:
+                        print("Vas a eliminar un Segurata")
+                        crud.lecturaGeneral("Seguridad")
+                        codigo = int(input("Introduce el codigo de Segurata -> "))
+                        crud.eliminarSegurata(codigo)
                         
                     case _:
                         print("Saliendo o no implementado")                       
@@ -363,7 +395,7 @@ while(salida != "si"):
                 salida = "si"
 
     except ValueError:
-        print("Oops!  That was no valid number.  Try again idiot...")
+        print("Oops! That was no valid number. Try again idiot...")
 
 crud.cursor.close()
 print("Adiós, no vuelvas más!")
